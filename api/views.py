@@ -35,7 +35,7 @@ class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
 
     def get_object(self, *args, **kwargs):
-        comment_pk = self.kwargs.get('pk', 9)
+        comment_pk = self.kwargs.get('pk')
         try:
             if self.request.method == 'GET':
                 comment = get_object_or_404(Comment, pk=comment_pk)
