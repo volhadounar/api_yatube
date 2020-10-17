@@ -15,9 +15,8 @@ class PostSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(slug_field='username',
                                           many=False, read_only=True)
-    post = serializers.SlugRelatedField(slug_field='id',
-                                        many=False, read_only=True)
 
     class Meta:
         model = Comment
         fields = ('id', 'text', 'created', 'author', 'post')
+        read_only_fields = ['post']
