@@ -21,11 +21,6 @@ class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-    def get_object(self):
-        obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
-        self.check_object_permissions(self.request, obj)
-        return obj
-
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
@@ -37,16 +32,11 @@ class CommentViewSet(ModelViewSet):
 
     def perform_create(self, serializer, *args, **kwargs):
         id = self.kwargs.get('post')
-        try:
-            post = get_object_or_404(Post, pk=id)
-        except Post.DoesNotExist:
-            raise exceptions.NotFound
+        post = get_object_or_404(Post, pk=id)
         serializer.save(author=self.request.user, post=post)
 
     def get_queryset(self, *args, **kwargs):
         id = self.kwargs.get('post')
-        try:
-            post_obj = Post.objects.get(pk=id)
-        except Post.DoesNotExist:
-            raise exceptions.NotFound
+        post_obj = get_object_or_404(Post, pk=id)
         return post_obj.comments
+
